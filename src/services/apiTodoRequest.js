@@ -4,7 +4,6 @@ export const getTodos = async () => {
   try {
     const respon = await axios.get(
       `${process.env.REACT_APP_URL_LOCALHOST}/api/todos?limit=10`
-      //   `${process.env.REACT_APP_URL_LOCALHOST}/api/todos`
     );
     return respon;
   } catch (error) {
@@ -16,7 +15,6 @@ export const getTodoById = async (id) => {
     const respon = await axios.get(
       `${process.env.REACT_APP_URL_LOCALHOST}/api/todo/${id}`
     );
-    // console.log("res", respon.data)
     return await respon.data;
   } catch (error) {
     console.log(error);

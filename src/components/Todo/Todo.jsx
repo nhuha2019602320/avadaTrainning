@@ -9,8 +9,7 @@ const Todo = ({ todo, index, completeTodo, removeTodo }) => {
       {todo.content}
 
       <div>
-        <button onClick={() => completeTodo(todo.id, index)}>Complete</button>
-        {/* <button onClick={() => completeTodo(todo.id,{...todo ,isCompleted:!todo.isCompleted })}>Complete</button> */}
+        <button onClick={() => completeTodo(todo.id)}>Complete</button>
         <button onClick={() => removeTodo(todo.id)}>x</button>
       </div>
     </div>
