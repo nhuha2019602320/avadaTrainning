@@ -6,8 +6,9 @@ import {
   Button,
   Badge,
   LegacyStack,
+  Spinner,
 } from "@shopify/polaris";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ModalCreate from "../Modal/ModalCreate";
 import {
   createData,
@@ -19,10 +20,10 @@ import {
 
 function TodoList() {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { data: items, setData: setItems } = useFetchApi(
     "http://localhost:5000/api/todos"
   );
-
 
   const bulkActions = [
     {
@@ -44,57 +45,55 @@ function TodoList() {
   };
 
   const handleDelete = async (id) => {
+    setLoading(true);
     if (id) {
       await deleteData(id);
-      setItems((preTodo) => preTodo.filter((todo) => todo.id !== id));
+      setTimeout(() => {
+        setLoading(false);
+        setItems((preTodo) => preTodo.filter((todo) => todo.id !== id));
+      }, 1000);
     }
   };
 
   const handleUpdate = async (item, id) => {
+    setLoading(true);
     const dataUpdte = await updateData({ isCompleted: !item.isCompleted }, id);
-    setItems(dataUpdte.data);
+    setTimeout(() => {
+      setLoading(false);
+      setItems(dataUpdte.data);
+    }, 2000);
   };
 
   const handledelDeleteAll = async () => {
-    console.log("first", selectedItems);
+    setLoading(true);
     const todoLists = await deleteData(selectedItems);
-    setItems(todoLists.data);
+    setTimeout(() => {
+      setLoading(false);
+      setItems(todoLists.data);
+    }, 2000);
   };
 
   const handleUpdateAll = async () => {
+    setLoading(true);
     const listItem = items.filter((item) => {
       return selectedItems.includes(item.id);
     });
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     const dataUpdate = await updateManyData(selectedItems, listItem);
-    console.log("dataUPdate", dataUpdate);
     setItems(dataUpdate);
-    // setItems(dataUpdate);
-    // console.log(items);
-    console.log(items)
   };
-  console.log("render")
   if (items)
     return (
-      <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "20px",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "20px",
-              fontFamily: "Arial",
-              lineHeight: "32px",
-            }}
-          >
-            Todos
-          </h1>
-        </div>
+      <>
         <LegacyCard>
           <ModalCreate handleCreate={handleCreate} />
+          {loading ? (
+            <Spinner accessibilityLabel="Spinner example" size="large" />
+          ) : (
+            ""
+          )}
           <ResourceList
             items={items}
             renderItem={renderItem}
@@ -104,15 +103,15 @@ function TodoList() {
             bulkActions={bulkActions}
           />
         </LegacyCard>
-      </div>
+      </>
     );
-
   function renderItem(item) {
     const { id, content, isCompleted } = item;
     return (
       <>
         <ResourceItem
           id={id}
+          key={id + isCompleted}
           // accessibilityLabel={`View details for ${content}`}
         >
           <LegacyStack>
