@@ -1,0 +1,27 @@
+<div class="jumbotron text-center">
+    <h1>My First Bootstrap Page</h1>
+    <p>Resize this responsive page to see the effect!</p>
+  </div>
+
+  <div class="container">
+    <div class="row">
+        <% for(var i=0; i<products.length; i++) {%>
+      <div class="col-sm-4">
+        <h3><%= products[i].name %></h3>
+        <p><%= products[i].description %></p>
+        <p><%= products[i].price %></p>
+        <p><%= products[i].color %></p>
+        <button type="button" class="btn btn-primary">Update</button>
+        <button type="button" onclick="myFunction('<%= products[i].name %>')" class="btn btn-primary">Delete</button>
+      </div>
+      <% } %>
+
+    </div>
+  </div>
+  <script>
+    function myFunction(id) {
+      alert(id)
+    }
+    </script>
+
+    
